@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed & Aya - Countdown to Forever</title>
+    
+    <!-- Google Fonts: A romantic script and a clean readable sans-serif -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'romantic-red': '#cc0000',
+                        'butterfly-orange': '#ff7a00',
+                        'bubble-blue': '#a8d5ff',
+                        'duck-yellow': '#ffcc00',
+                        'bear-brown': '#8b5a2b',
+                        'paper': '#fdfbf7',
+                        // Adding dark neon colors for the countdown
+                        'neon-pink': '#ff2a85',
+                        'neon-cyan': '#00f3ff',
+                        'dark-glass': 'rgba(15, 23, 42, 0.75)',
+                        // New Countdown Colors
+                        'crimson-red': '#DC143C',
+                        'navy-blue': '#1E3A8A',
+                        'rich-purple': '#7E22CE',
+                        'emerald-green': '#10B981'
+                    },
+                    fontFamily: {
+                        'script': ['"Dancing Script"', 'cursive'],
+                        'sans': ['Quicksand', 'sans-serif'],
+                        // Adding a technical font for the numbers
+                        'mono': ['"Share Tech Mono"', 'monospace']
+                    },
+                    boxShadow: {
+                        'neon-glow': '0 0 15px rgba(0, 243, 255, 0.3), inset 0 0 10px rgba(0, 243, 255, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Adding Google Font for the countdown numbers -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            /* Soft warm gradient background */
+            background: linear-gradient(135deg, #fff0f3 0%, #fff9e6 50%, #e6f7ff 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            /* Custom Sparkle Cursor */
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='28' font-size='28'>✨</text></svg>") 16 16, auto;
+        }
+
+        /* Custom cursor for clickable items (Sparkling Heart) */
+        button, .polaroid, #close-modal, a {
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='28' font-size='28'>💖</text></svg>") 16 16, pointer !important;
+        }
+
+        /* Floating Motifs Animation */
+        .floating-motif {
+            position: fixed;
+            pointer-events: none; /* Don't interfere with clicks */
+            z-index: 0;
+            opacity: 0.6;
+            animation: floatUp linear infinite;
+            font-size: 2.5rem; /* Make emojis nice and large */
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* SVG Motif specific styling */
+        .motif-svg {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* Sparkle Cursor Styles */
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 9999;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ffd700;
+            box-shadow: 0 0 10px #ffd700, 0 0 20px #ff8c00;
+            animation: sparkle-anim 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes sparkle-anim {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: scale(0) translateY(30px) rotate(180deg); opacity: 0; }
+        }
+
+        /* Frosted Glass Wrapper for readability */
+        .frosted-wrapper {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 2rem;
+            padding: 2.5rem 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Elegant Circular Countdown Styles */
+        .countdown-circle {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 0 15px rgba(255, 255, 255, 0.8);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .countdown-circle {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        .countdown-circle:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2), inset 0 0 20px rgba(255, 255, 255, 1);
+        }
+
+        .circle-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            transform: rotate(-90deg);
+        }
+        
+        .circle-svg circle {
+            fill: none;
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 290;
+            stroke-dashoffset: 290;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        /* Cooler Countdown Styles */
+        .countdown-box {
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Subtle animated gradient border for countdown boxes */
+        .countdown-box::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff2a85, #00f3ff, #ff2a85);
+            z-index: -1;
+            border-radius: inherit;
+            animation: borderGlow 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .countdown-box:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes borderGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Number flipping effect placeholder */
+        .num-val {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            z-index: 20;
+        }
+
+        /* Locked state overlay */
+        .locked-overlay {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfbf7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffb3c6;
+            border-radius: 5px;
+        }
+        
+        /* Ensure content stays above floating elements */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800">
+
+    <!-- Container for floating background elements injected via JS -->
+    <div id="background-motifs"></div>
+
+    <div class="content-wrapper container mx-auto px-4 py-12 max-w-6xl">
+        
+        <!-- Header Section Encased in Glass -->
+        <div class="frosted-wrapper mt-4 mx-auto max-w-4xl">
+            <header class="text-center">
+                <h1 class="font-script text-6xl md:text-8xl text-romantic-red mb-4 drop-shadow-md">Ahmed & Aya</h1>
+                <p class="text-xl md:text-2xl text-gray-800 font-semibold mb-10">Counting Down to Our Engagement! <br> <span class="text-sm font-bold text-gray-600 mt-2 block">November 22, 2026 - 7:00 PM</span></p>
+                
+                <!-- Elegant Circular Countdown -->
+                <div id="countdown" class="flex justify-center gap-4 md:gap-10 flex-wrap">
+                    <!-- Days -->
+                    <div class="countdown-circle">
+                        <svg class="circle-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" stroke="#DC143C" id="svg-days"></circle></svg>
+                        <span id="days" class="num-val block font-sans text-4xl md:text-5xl font-bold text-crimson-red drop-shadow-sm">00</span>
+                        <span class="text-xs md:text-sm uppercase tracking-widest text-gray-700 mt-1 font-bold">Days</span>
+                    </div>
+                    <!-- Hours -->
+                    <div class="countdown-circle delay-75">
+                        <svg class="circle-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" stroke="#1E3A8A" id="svg-hours"></circle></svg>
+                        <span id="hours" class="num-val block font-sans text-4xl md:text-5xl font-bold text-navy-blue drop-shadow-sm">00</span>
+                        <span class="text-xs md:text-sm uppercase tracking-widest text-gray-700 mt-1 font-bold">Hours</span>
+                    </div>
+                    <!-- Minutes -->
+                    <div class="countdown-circle delay-150">
+                        <svg class="circle-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" stroke="#7E22CE" id="svg-minutes"></circle></svg>
+                        <span id="minutes" class="num-val block font-sans text-4xl md:text-5xl font-bold text-rich-purple drop-shadow-sm">00</span>
+                        <span class="text-xs md:text-sm uppercase tracking-widest text-gray-700 mt-1 font-bold">Mins</span>
+                    </div>
+                    <!-- Seconds -->
+                    <div class="countdown-circle delay-200">
+                        <svg class="circle-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" stroke="#10B981" id="svg-seconds"></circle></svg>
+                        <span id="seconds" class="num-val block font-sans text-4xl md:text-5xl font-bold text-emerald-green drop-shadow-sm">00</span>
+                        <span class="text-xs md:text-sm uppercase tracking-widest text-gray-700 mt-1 font-bold">Secs</span>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+        <!-- Memories Section Encased in Glass -->
+        <div class="frosted-wrapper text-center mb-8 py-6 mx-auto max-w-4xl">
+            <h2 class="font-script text-4xl md:text-5xl text-bear-brown mb-2">Our Journey</h2>
+            <p class="text-gray-700 font-semibold text-lg">Memories will unlock as we get closer to the big day!</p>
+        </div>
+
+        <div id="memory-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 p-4">
+            <!-- Polaroids will be injected here by JavaScript -->
+        </div>
+
+    </div>
+
+    <!-- Modal for viewing photos -->
+    <div id="photo-modal" class="fixed inset-0 bg-black/80 z-50 hidden flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <button id="close-modal" class="absolute top-6 right-6 text-white hover:text-romantic-red transition text-4xl focus:outline-none">&times;</button>
+        
+        <div class="bg-paper p-4 md:p-6 rounded-lg max-w-2xl w-full mx-auto transform scale-95 transition-transform duration-300 shadow-2xl relative" id="modal-content">
+            <img id="modal-img" src="" alt="Memory" class="w-full h-auto rounded shadow-sm mb-6 max-h-[60vh] object-cover">
+            <div class="text-center">
+                <h3 id="modal-date" class="font-script text-3xl md:text-4xl text-romantic-red mb-3"></h3>
+                <p id="modal-text" class="text-lg text-gray-700 leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        // Set for November 22, 2026 at 19:00 (7 PM) Egypt Time (+02:00)
+        const TARGET_DATE = new Date("2026-11-22T19:00:00+02:00").getTime();
+        
+        // ============================================================================
+        // 🛑 EDIT YOUR IMAGES AND TEXT HERE 🛑
+        // ============================================================================
+        // To add your real photos:
+        // 1. Upload your photos to an image hosting site (like Imgur, Google Drive, etc.)
+        // 2. Copy the DIRECT LINK to the image (it should end in .jpg, .png, etc.)
+        // 3. Replace the "https://placehold.co/..." link inside the quotes below.
+        // 4. Edit the 'title' and 'description' to whatever you like!
+        // ============================================================================
+
+        const memories = [
+            {
+                id: 1,
+                date: "16/08/2026",
+                title: "Falling",
+                description: "Met at the Hospital, Slowly realizing we are falling for one another.",
+                img: "https://placehold.co/600x600/ffb3ba/ffffff?text=16/08/2026", // <-- REPLACE THIS LINK
+                unlockDays: 70, // Always unlocked at this point
+                rotation: -3
+            },
+            {
+                id: 2,
+                date: "23/08/2026",
+                title: "A Nice Welcome",
+                description: "Met at the Hospital, Her sister and her cousin were there and it felt like a nice welcome.",
+                img: "https://placehold.co/600x600/ffdfba/ffffff?text=23/08/2026", // <-- REPLACE THIS LINK
+                unlockDays: 65, 
+                rotation: 2
+            },
+            {
+                id: 3,
+                date: "28/08/2026",
+                title: "Ashmoon Drive",
+                description: "Drive to Ashmoon, Very special event that does not need explaining.",
+                img: "https://placehold.co/600x600/ffffba/555555?text=28/08/2026", // <-- REPLACE THIS LINK
+                unlockDays: 55, // Unlocks around end of Sept
+                rotation: -2
+            },
+            {
+                id: 4,
+                date: "29/08/2026",
+                title: "Maadi Birthday",
+                description: "Met in Maadi with short notice and gave her the birthday gift.",
+                img: "https://placehold.co/600x600/baffc9/555555?text=29/08/2026", // <-- REPLACE THIS LINK
+                unlockDays: 48,
+                rotation: 3
+            },
+            {
+                id: 5,
+                date: "03/09/2026",
+                title: "First Pizza",
+                description: "Met at the hospital and drove to Nasr City for our first pizza together.",
+                img: "https://placehold.co/600x600/bae1ff/555555?text=03/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 41,
+                rotation: -1
+            },
+            {
+                id: 6,
+                date: "10/09/2026",
+                title: "Meeting Sister",
+                description: "Met in Helwan drove to Maadi, First time for her to meet my sister.",
+                img: "https://placehold.co/600x600/e8baff/ffffff?text=10/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 34,
+                rotation: 4
+            },
+            {
+                id: 7,
+                date: "15/09/2026",
+                title: "Pizza & Blessing",
+                description: "Met in Helwan drove to Maadi, She took me out for pizza and her work was cancelled which made me able to call her brother that day.",
+                img: "https://placehold.co/600x600/ffb3ba/ffffff?text=15/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 27,
+                rotation: -4
+            },
+            {
+                id: 8,
+                date: "18/09/2026",
+                title: "Madinaty",
+                description: "Met Her brother in Madinaty and got a soft blessing to come over on the date we agreed on.",
+                img: "https://placehold.co/600x600/ffdfba/ffffff?text=18/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 20,
+                rotation: 1
+            },
+            {
+                id: 9,
+                date: "19/09/2026",
+                title: "In Sickness & Health",
+                description: "Met in Helwan drove to Maadi, Had her first encounter with me sick.",
+                img: "https://placehold.co/600x600/ffffba/555555?text=19/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 10,
+                rotation: -3
+            },
+            {
+                id: 10,
+                date: "22/09/2026",
+                title: "Formal Outing",
+                description: "Met in Helwan drove to Maadi, Our first outing when we both wore formal.",
+                img: "https://placehold.co/600x600/baffc9/555555?text=22/09/2026", // <-- REPLACE THIS LINK
+                unlockDays: 3, // Unlocks just 3 days before!
+                rotation: 2
+            }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const elements = {
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds'),
+            svgDays: document.getElementById('svg-days'),
+            svgHours: document.getElementById('svg-hours'),
+            svgMinutes: document.getElementById('svg-minutes'),
+            svgSeconds: document.getElementById('svg-seconds'),
+            grid: document.getElementById('memory-grid'),
+            modal: document.getElementById('photo-modal'),
+            modalImg: document.getElementById('modal-img'),
+            modalDate: document.getElementById('modal-date'),
+            modalText: document.getElementById('modal-text'),
+            closeModal: document.getElementById('close-modal'),
+            modalContent: document.getElementById('modal-content'),
+            bgContainer: document.getElementById('background-motifs')
+        };
+
+        let currentDaysRemaining = 999; // Default large number
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = TARGET_DATE - now;
+
+            if (distance < 0) {
+                // Engagement Day!
+                elements.days.innerText = "00";
+                elements.hours.innerText = "00";
+                elements.minutes.innerText = "00";
+                elements.seconds.innerText = "00";
+                currentDaysRemaining = 0;
+                renderGrid(); // Re-render to unlock everything
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            elements.days.innerText = String(days).padStart(2, '0');
+            elements.hours.innerText = String(hours).padStart(2, '0');
+            elements.minutes.innerText = String(minutes).padStart(2, '0');
+            elements.seconds.innerText = String(seconds).padStart(2, '0');
+
+            // Update SVG Progress Rings (290 is the exact stroke-dasharray matching the circle circumference)
+            if(elements.svgDays) elements.svgDays.style.strokeDashoffset = 290 - (290 * ((days % 365) / 365));
+            if(elements.svgHours) elements.svgHours.style.strokeDashoffset = 290 - (290 * (hours / 24));
+            if(elements.svgMinutes) elements.svgMinutes.style.strokeDashoffset = 290 - (290 * (minutes / 60));
+            if(elements.svgSeconds) elements.svgSeconds.style.strokeDashoffset = 290 - (290 * (seconds / 60));
+
+            // Only re-render grid if the DAY changes to avoid constant re-drawing
+            if (currentDaysRemaining !== days) {
+                currentDaysRemaining = days;
+                renderGrid();
+            }
+        }
+
+        function renderGrid() {
+            elements.grid.innerHTML = ''; // Clear current grid
+
+            memories.forEach(memory => {
+                const isUnlocked = currentDaysRemaining <= memory.unlockDays;
+                
+                // Create Polaroid Container
+                const card = document.createElement('div');
+                card.className = 'polaroid flex flex-col rounded';
+                // Apply subtle random rotation for a natural stack look
+                card.style.transform = `rotate(${memory.rotation}deg)`;
+
+                // Image Container
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'relative aspect-square mb-4 overflow-hidden bg-gray-200 rounded-sm';
+
+                // Image Element
+                const img = document.createElement('img');
+                img.src = memory.img;
+                img.alt = memory.title;
+                img.className = 'w-full h-full object-cover transition duration-500';
+
+                if (!isUnlocked) {
+                    img.classList.add('blur-sm', 'grayscale');
+                    
+                    // Lock Overlay
+                    const overlay = document.createElement('div');
+                    overlay.className = 'absolute inset-0 locked-overlay flex flex-col items-center justify-center text-gray-800';
+                    overlay.innerHTML = `
+                        <svg class="w-12 h-12 mb-2 text-romantic-red opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        <span class="font-bold font-script text-2xl">Locked</span>
+                        <span class="text-xs font-semibold bg-white/70 px-2 py-1 rounded mt-2">Unlocks at ${memory.unlockDays} days left</span>
+                    `;
+                    imgContainer.appendChild(img);
+                    imgContainer.appendChild(overlay);
+                    
+                    // Click handler for locked
+                    card.onclick = () => showMessageBox("Patience!", `This beautiful memory will unlock when we are ${memory.unlockDays} days away from the engagement.`);
+                } else {
+                    imgContainer.appendChild(img);
+                    // Click handler for unlocked
+                    card.onclick = () => openModal(memory);
+                }
+
+                // Text Area
+                const textArea = document.createElement('div');
+                textArea.className = 'text-center mt-auto';
+                textArea.innerHTML = `<h3 class="font-script text-2xl text-gray-800">${isUnlocked ? memory.date : '???'}</h3>`;
+
+                card.appendChild(imgContainer);
+                card.appendChild(textArea);
+                elements.grid.appendChild(card);
+            });
+        }
+
+        function openModal(memory) {
+            elements.modalImg.src = memory.img;
+            elements.modalDate.innerText = memory.date;
+            elements.modalText.innerText = memory.description;
+            
+            elements.modal.classList.remove('hidden');
+            // Small delay to allow display block to register before animating opacity
+            setTimeout(() => {
+                elements.modal.classList.remove('opacity-0');
+                elements.modalContent.classList.remove('scale-95');
+                elements.modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            elements.modal.classList.add('opacity-0');
+            elements.modalContent.classList.remove('scale-100');
+            elements.modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                elements.modal.classList.add('hidden');
+                elements.modalImg.src = ""; // Clear to prevent flash on next open
+            }, 300);
+        }
+
+        // Event Listeners for Modal
+        elements.closeModal.onclick = closeModal;
+        elements.modal.onclick = (e) => {
+            if (e.target === elements.modal) closeModal();
+        };
+
+        // --- Sparkle Cursor Logic ---
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() < 0.4) { // Control density of sparkles
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (e.pageX - 4) + 'px';
+                sparkle.style.top = (e.pageY - 4) + 'px';
+                
+                // Array of cute magical colors fitting the theme
+                const colors = ['#ffd700', '#ff2a85', '#00f3ff', '#ffb6c1', '#ffffff'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.backgroundColor = color;
+                sparkle.style.boxShadow = `0 0 8px ${color}, 0 0 15px ${color}`;
+                
+                document.body.appendChild(sparkle);
+                
+                // Cleanup sparkle after animation to prevent memory leaks
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 800);
+            }
+        });
+        
+        // Custom Message Box (Replacement for default alert())
+        function showMessageBox(title, message) {
+            const box = document.createElement('div');
+            box.className = 'fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 opacity-0 transition-opacity duration-300';
+            box.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl p-6 md:p-8 max-w-sm w-full text-center transform scale-90 transition-transform duration-300">
+                    <h4 class="font-script text-4xl text-butterfly-orange mb-2">${title}</h4>
+                    <p class="text-gray-600 mb-6 font-semibold">${message}</p>
+                    <button class="bg-romantic-red hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full transition shadow-lg w-full">Okay!</button>
+                </div>
+            `;
+            document.body.appendChild(box);
+            
+            // Animate in
+            setTimeout(() => {
+                box.classList.remove('opacity-0');
+                box.querySelector('div').classList.remove('scale-90');
+                box.querySelector('div').classList.add('scale-100');
+            }, 10);
+
+            // Animate out
+            box.querySelector('button').onclick = () => {
+                box.classList.add('opacity-0');
+                box.querySelector('div').classList.remove('scale-100');
+                box.querySelector('div').classList.add('scale-90');
+                setTimeout(() => box.remove(), 300);
+            };
+        }
+
+        function createMotif() {
+            // Batman Signal abstraction (Keeping this as SVG since there's no perfect Batman emoji)
+            const batSignalSvg = `<svg class="motif-svg" style="width: 40px; height: 40px;" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="11" ry="8" fill="#ffe81f"/><path d="M12 9l-1 2-2-1v2s-3-1-5-1c-1 0-2 2-2 2s1-1 2-1c2 0 4 3 4 3l3-2h2l3 2s2-3 4-3c1 0 2 1 2 1s-1-2-2-2c-2 0-5 1-5 1v-2l-2 1-1-2z" fill="black"/></svg>`;
+            
+            // Mixed Emojis and the custom SVG!
+            const motifs = ['🌹', '🦋', '🫧', '🐥', '🐻', '🍯', '🐰', batSignalSvg];
+            
+            const motif = document.createElement('div');
+            
+            // Randomly select a motif
+            const randomMotif = motifs[Math.floor(Math.random() * motifs.length)];
+            motif.innerHTML = randomMotif;
+            
+            // Styling
+            motif.className = 'floating-motif flex justify-center items-center';
+
+            // Randomize start position and animation duration
+            const startX = Math.random() * 100; // random horizontal position (0-100vw)
+            const duration = 10 + Math.random() * 15; // random duration between 10s and 25s
+            
+            motif.style.left = `${startX}vw`;
+            motif.style.animationDuration = `${duration}s`;
+            
+            // Append the motif to the background container so it shows up!
+            elements.bgContainer.appendChild(motif);
+
+            // Remove after animation finishes to keep DOM clean
+            setTimeout(() => {
+                motif.remove();
+            }, duration * 1000);
+        }
+
+        window.onload = function() {
+            // Initial call to set days correctly before rendering grid
+            updateCountdown(); 
+            
+            // Start countdown interval
+            setInterval(updateCountdown, 1000);
+
+            // Start creating floating motifs
+            setInterval(createMotif, 1500);
+            // Create a few immediately so screen isn't empty
+            for(let i=0; i<5; i++) {
+                setTimeout(createMotif, i * 300);
+            }
+        };
+
+    </script>
+</body>
+</html>
