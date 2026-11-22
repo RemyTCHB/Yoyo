@@ -231,7 +231,7 @@
         .is-big-day .big-day { display: block; }
 
         /* ---------- Journey ---------- */
-        .section-head { text-align: center; margin: 88px 0 36px; }
+        .section-head { text-align: center; margin: 40px 0 36px; }
         .section-head h2 {
             font-family: var(--script); font-weight: 400; margin: 6px 0 0;
             font-size: clamp(52px, 11vw, 80px); line-height: 1; color: var(--gold-deep);
@@ -471,35 +471,6 @@
                 </div>
 
             </div>
-        </section>
-
-        <!-- ================= COUNTDOWN ================= -->
-        <section class="countdown-card" id="countdown-card" aria-live="polite">
-            <span class="eyebrow countdown-eyebrow">Until Thursday, 26 November</span>
-
-            <div class="countdown" id="countdown">
-                <div class="unit"><span class="num" id="days">00</span><span class="eyebrow lbl">Days</span></div>
-                <span class="sep">·</span>
-                <div class="unit"><span class="num" id="hours">00</span><span class="eyebrow lbl">Hours</span></div>
-                <span class="sep">·</span>
-                <div class="unit"><span class="num" id="minutes">00</span><span class="eyebrow lbl">Minutes</span></div>
-                <span class="sep">·</span>
-                <div class="unit"><span class="num" id="seconds">00</span><span class="eyebrow lbl">Seconds</span></div>
-            </div>
-
-            <div class="big-day">
-                <h2>Always yours 🤍</h2>
-                <p>Ahmed &amp; Aya</p>
-            </div>
-
-            <div class="progress">
-                <div class="progress-row">
-                    <span>Memories unlocked</span>
-                    <em id="progress-label">0 of 0</em>
-                </div>
-                <div class="bar"><i id="progress-bar"></i></div>
-            </div>
-            <p class="next-unlock" id="next-unlock"></p>
         </section>
 
         <!-- ================= JOURNEY ================= -->
@@ -822,57 +793,17 @@
         }
 
         // ============================================================================
-        // COUNTDOWN
+        // UNLOCK CHECK — re-render the grid whenever a memory opens
         // ============================================================================
-        let celebrated = false;
-
         function tick() {
             const now = Date.now();
-            const dist = TARGET_DATE - now;
-
-            if (dist <= 0) {
-                if (!celebrated) {
-                    celebrated = true;
-                    $("countdown-card").classList.add("is-big-day");
-                }
-            } else {
-                $("days").textContent = pad(Math.floor(dist / 86400000));
-                $("hours").textContent = pad(Math.floor(dist % 86400000 / 3600000));
-                $("minutes").textContent = pad(Math.floor(dist % 3600000 / 60000));
-                $("seconds").textContent = pad(Math.floor(dist % 60000 / 1000));
-            }
-
-            // Re-render the grid only when something new unlocks
             const key = memories.map(m => isUnlocked(m, now) ? 1 : 0).join("");
             if (key !== unlockedSet) {
                 const prev = unlockedSet;
                 unlockedSet = key;
                 renderGrid(now);
-                updateProgress(now);
                 if (prev && memories.some((m, i) => key[i] === "1" && prev[i] === "0" && !m.quiet)) burst();
             }
-
-            // Next unlock teaser
-            const next = memories.find(m => !isUnlocked(m, now));
-            const el = $("next-unlock");
-            if (next) {
-                const { day, time } = unlockLabel(next.unlockAt);
-                const isFinal = next === memories[memories.length - 1];
-                el.innerHTML = "";
-                el.append(isFinal ? "The final memory unlocks in " : "Next memory unlocks in ");
-                const strong = document.createElement("strong");
-                strong.textContent = inWords(next.unlockAt - now);
-                el.append(strong, ` · ${day}, ${time}`);
-            } else {
-                el.textContent = "Every memory is unlocked 💛";
-            }
-        }
-
-        function updateProgress(now) {
-            const total = memories.length;
-            const count = memories.filter(m => isUnlocked(m, now)).length;
-            $("progress-label").textContent = `${count} of ${total}`;
-            $("progress-bar").style.width = `${(count / total) * 100}%`;
         }
 
         // ============================================================================
