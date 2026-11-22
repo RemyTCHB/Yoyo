@@ -455,6 +455,8 @@
     <div id="motifs" aria-hidden="true"></div>
     <canvas id="confetti" aria-hidden="true"></canvas>
 
+    <div id="preview-banner" hidden style="position:sticky;top:0;z-index:50;background:#85622F;color:#FFFDF9;text-align:center;font-family:Jost,sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:8px 12px;">Preview · everything unlocked · only on this link</div>
+    <script>if (new URLSearchParams(location.search).has("preview")) document.getElementById("preview-banner").hidden = false;</script>
     <main class="page">
 
         <!-- ================= HERO ================= -->
@@ -702,7 +704,7 @@
             const cutoff = Date.now() - 2 * 86400000;
             seen = memories.filter(m => m.unlockAt <= cutoff).map(m => m.id);
         }
-        const saveSeen = () => { try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {} };
+        const saveSeen = () => { if (new URLSearchParams(location.search).has("preview")) return; try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) {} };
         const markSeen = id => { if (!seen.includes(id)) { seen.push(id); saveSeen(); } };
 
         // ============================================================================
@@ -739,7 +741,9 @@
         const grid = $("grid");
         let unlockedSet = "";
 
-        function isUnlocked(m, now) { return now >= m.unlockAt || now >= TARGET_DATE; }
+        // Private preview: add ?preview to the address to open every memory (only for that visit)
+        const PREVIEW = new URLSearchParams(location.search).has("preview");
+        function isUnlocked(m, now) { return PREVIEW || now >= m.unlockAt || now >= TARGET_DATE; }
 
         function renderGrid(now) {
             grid.innerHTML = "";
