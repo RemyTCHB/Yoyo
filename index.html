@@ -18,7 +18,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Pinyon+Script&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -385,10 +385,22 @@
         @keyframes inL { from { opacity: 0; transform: translateX(40px); } }
         @keyframes inR { from { opacity: 0; transform: translateX(-40px); } }
 
-        .caption { text-align: center; color: #F3ECE2; max-width: 620px; margin-top: 22px; overflow-y: auto; }
+        .caption { text-align: center; color: #F3ECE2; max-width: 620px; width: 100%; margin-top: 22px; overflow-y: auto; min-height: 0; -webkit-overflow-scrolling: touch; }
+        .media { flex-shrink: 0; }
         .caption .eyebrow { color: var(--gold-light); }
         .caption h3 { font-family: var(--script); font-weight: 400; font-size: clamp(38px, 8vw, 54px); line-height: 1.1; margin: 6px 0 4px; color: #E7D3AC; }
         .caption p { font-size: 19px; line-height: 1.6; color: #E6DED3; margin: 0; }
+
+        /* Arabic (right-to-left) memories */
+        .ar { font-family: "Amiri", "Traditional Arabic", serif !important; font-style: normal !important; }
+        .card h3.ar { font-size: 27px; line-height: 1.5; font-weight: 700; }
+        .caption h3.ar { font-size: clamp(30px, 7vw, 42px); line-height: 1.6; font-weight: 700; margin: 4px 0 10px; }
+        .caption p.ar { font-size: 21px; line-height: 2.05; white-space: pre-line; text-align: right; padding: 0 6px 28px; }
+        .viewer.long .media, .viewer.long .media img, .viewer.long .media video { max-height: 40vh; }
+        .viewer.long .caption {
+            -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 36px), transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - 36px), transparent 100%);
+        }
 
         .v-btn {
             position: absolute; z-index: 2;
@@ -660,8 +672,8 @@
                 unlock: "2026-11-23T00:00:00+02:00"
             },
             {
-                id: 20, date: "14/11/2026", title: "Awel Lo2ma Haneya Men Eidek",
-                description: "Unforgettable Day, We Met, Ate, Laughed, Watched A Movie... The Whole 9 Yards.",
+                id: 20, date: "14/11/2026", title: "أول لقمة هنية من إيدك", rtl: true,
+                description: `__ARABIC_TEXT__`,
                 unlock: "2026-11-26T19:00:00+02:00"
             }
         ].map(m => {
@@ -796,6 +808,7 @@
                     }
                     date.textContent = fancyDate(m.date);
                     h3.textContent = m.title;
+                    if (m.rtl) { h3.dir = "rtl"; h3.lang = "ar"; h3.classList.add("ar"); }
                     card.setAttribute("aria-label", `Open memory ${m.id}: ${m.title}`);
                     card.addEventListener("click", () => openViewer(m.id));
                 } else {
@@ -961,6 +974,13 @@
             $("v-date").textContent = `No. ${m.num} · ${fancyDate(m.date)}`;
             $("v-title").textContent = m.title;
             $("v-text").textContent = m.description;
+            [$("v-title"), $("v-text")].forEach(el => {
+                el.dir = m.rtl ? "rtl" : "auto";
+                el.lang = m.rtl ? "ar" : "en";
+                el.classList.toggle("ar", !!m.rtl);
+            });
+            viewer.classList.toggle("long", m.description.length > 280);
+            document.querySelector(".caption").scrollTop = 0;
             $("v-prev").style.visibility = viewIndex > 0 ? "visible" : "hidden";
             $("v-next").style.visibility = viewIndex < viewList.length - 1 ? "visible" : "hidden";
 
@@ -992,14 +1012,15 @@
         });
 
         let touchX = null, touchY = null;
-        viewer.addEventListener("touchstart", e => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; }, { passive: true });
+        let touchInCaption = false;
+        viewer.addEventListener("touchstart", e => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; touchInCaption = !!e.target.closest(".caption"); }, { passive: true });
         viewer.addEventListener("touchend", e => {
             if (touchX === null) return;
             const dx = e.changedTouches[0].clientX - touchX;
             const dy = e.changedTouches[0].clientY - touchY;
             touchX = null;
             if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.3) step(dx < 0 ? 1 : -1);
-            else if (dy > 110 && Math.abs(dy) > Math.abs(dx) * 1.5) closeViewer();
+            else if (!touchInCaption && dy > 110 && Math.abs(dy) > Math.abs(dx) * 1.5) closeViewer();
         }, { passive: true });
 
         // ============================================================================
