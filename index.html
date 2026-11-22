@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ahmed & Aya · Countdown to Our Engagement</title>
-    <meta name="description" content="Ahmed & Aya are getting engaged · Thursday, 26 November 2026">
+    <title>Ahmed & Aya</title>
+    <meta name="description" content="Ahmed & Aya · Our Journey">
     <meta name="theme-color" content="#FBF7F1">
 
     <!-- Link preview (WhatsApp, iMessage, etc.) -->
     <meta property="og:title" content="Ahmed & Aya">
-    <meta property="og:description" content="Counting down to our engagement · 26 · 11 · 2026">
+    <meta property="og:description" content="Our Journey">
     <meta property="og:image" content="https://raw.githubusercontent.com/RemyTCHB/Yoyo/main/hero.jpg">
     <meta property="og:type" content="website">
 
@@ -181,17 +181,6 @@
         .date-line b { font-family: var(--serif); font-weight: 500; font-size: 30px; letter-spacing: .04em; margin: 0 .25em; vertical-align: -3px; }
         .time-line { font-style: italic; color: var(--muted); margin-top: 6px; font-size: 18px; }
 
-        /* Family milestone */
-        .milestone {
-            display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
-            margin-top: 26px; padding: 14px 26px 12px;
-            border-top: 1px solid var(--gold-pale); border-bottom: 1px solid var(--gold-pale);
-        }
-        .milestone-text { font-style: italic; font-size: 21px; color: var(--ink); line-height: 1.3; }
-        .milestone-sub { font-family: var(--sans); font-size: 12px; letter-spacing: .14em; color: var(--muted); }
-        .milestone-sub:empty { display: none; }
-        .milestone.done .milestone-text { color: var(--rose); font-size: 24px; }
-
         /* ---------- Countdown ---------- */
         .countdown-card {
             margin: 40px auto 0;
@@ -235,7 +224,7 @@
         .big-day { display: none; padding: 6px 0 4px; }
         .big-day h2 {
             font-family: var(--script); font-weight: 400; margin: 0;
-            font-size: clamp(54px, 13vw, 96px); line-height: 1.05; color: var(--rose);
+            font-size: clamp(44px, 11vw, 80px); line-height: 1.1; color: var(--rose);
         }
         .big-day p { margin: 6px 0 0; font-style: italic; color: var(--ink-soft); font-size: 20px; }
         .is-big-day .countdown, .is-big-day .countdown-eyebrow, .is-big-day .next-unlock { display: none; }
@@ -475,28 +464,18 @@
             </div>
 
             <div class="hero-text">
-                <span class="eyebrow">Save the date</span>
                 <h1 class="names">Ahmed <span class="amp">&amp;</span> Aya</h1>
-                <p class="tagline">are getting engaged</p>
 
                 <div class="ornament" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5"/><circle cx="15" cy="14" r="5"/><path d="M12 5.5l1.6-2h-3.2z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19.5s-7-4.3-7-9.4A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.1c0 5.1-7 9.4-7 9.4z"/></svg>
                 </div>
 
-                <div class="date-line">Thursday <b>26</b> November <b>2026</b></div>
-                <div class="time-line">at seven o'clock in the evening</div>
-
-                <div class="milestone" id="milestone">
-                    <span class="eyebrow" id="milestone-eyebrow">First, meeting the family</span>
-                    <span class="milestone-text" id="milestone-text">Friday 20 November · 6 pm</span>
-                    <span class="milestone-sub" id="milestone-sub"></span>
-                </div>
             </div>
         </section>
 
         <!-- ================= COUNTDOWN ================= -->
         <section class="countdown-card" id="countdown-card" aria-live="polite">
-            <span class="eyebrow countdown-eyebrow">Counting down to our engagement</span>
+            <span class="eyebrow countdown-eyebrow">Until Thursday, 26 November</span>
 
             <div class="countdown" id="countdown">
                 <div class="unit"><span class="num" id="days">00</span><span class="eyebrow lbl">Days</span></div>
@@ -509,8 +488,8 @@
             </div>
 
             <div class="big-day">
-                <h2>Today's the day! 💍</h2>
-                <p>Ahmed &amp; Aya · 26 November 2026</p>
+                <h2>Always yours 🤍</h2>
+                <p>Ahmed &amp; Aya</p>
             </div>
 
             <div class="progress">
@@ -527,7 +506,7 @@
         <header class="section-head">
             <span class="eyebrow">Chapter by chapter</span>
             <h2>Our Journey</h2>
-            <p>Memories unlock as we get closer to the big day</p>
+            <p>Memories unlock one by one</p>
         </header>
 
         <section class="grid" id="grid"></section>
@@ -564,9 +543,7 @@
         // ============================================================================
         // CONFIGURATION — all times are Egypt time (+02:00)
         // ============================================================================
-        const TARGET_DATE = new Date("2026-11-26T19:00:00+02:00").getTime();
-        // Officially meeting the family
-        const FAMILY_DATE = new Date("2026-11-20T18:00:00+02:00").getTime();
+        const TARGET_DATE = new Date("2026-11-26T00:00:00+02:00").getTime();
 
         // If a file can't be found next to the page, load it from GitHub instead.
         const FALLBACK_BASE = "https://raw.githubusercontent.com/RemyTCHB/Yoyo/main/";
@@ -672,9 +649,9 @@
                 unlock: "2026-11-23T00:00:00+02:00"
             },
             {
-                id: 20, date: "14/11/2026", title: "أول لقمة هنية من إيدك", rtl: true,
-                description: `__ARABIC_TEXT__`,
-                unlock: "2026-11-26T19:00:00+02:00"
+                id: 20, date: "14/11/2026", title: "أول لقمة هنية من إيدك", rtl: true, quiet: true,
+                description: "آيه يا حبيبة قلبي و روحي و نور عيوني، انتي لسا واخده ال quitapex دلوقتي عشان تنامي بعد اليوم الصدمة الاتحطينا فيها سوا، انا بجد مش عارف اقول ايه ولا ايه ولا ابداء منين، انتي هتشوفي الصورة دي في اليوم الهو المفروض كنا نلبس دبل فيه، بجد انا قلبي متقطع عليكي و علينا مليون حته، و مش قادر حتي اقول يا ريتيك ما لقيتي طوبتي ال انا رميها زي ما انتي قلتي عشان انا الكام شهر دول بجد عشت معاكي فيهم ايام ولا في الخيال حسيت معاكي بحجات مكنتش حتي اتخيل اني اقدر احسها تاني، و انا عارف يا حبيبتي ان انتي كمان حالك من حالي و زي منا سكنتلك انتي سكنتيلي، انا بقيت قاعد ادعي و اشكي و اقول يا رب طب ما انت يا رب الحطيتنا في طريق بعض و دوقتنا حجات مكناش نتخيلها يا رب فا ليه الفجعة دي في احلي حاجة حصلتلي، انا بجد عيط كمية عياط مش طبيعية من الساعة ١٠ بليل اول امبارح لحد دلوقتي اهو و انا بكتب و لسا ببكي، انا بنيت كل حاجة علي اساس انك فيها و بحبك و بحبك ابصلك و ادلعك و اعاكسك و اكون معاكي و بحب نفسي حواليكي بجد، مش قادر افهم ليه القلبة ال ١٨٠ درجة دي و ليه ربنا خلي الأمور تحصل بالشكل ده، مش عايز اغلط و اعترض علي قضاء ربنا، بس مش قادر اقبله و مش عارف هل ده امتحان لينا عشان افضل اعافر و احارب عشانك ولا ده حصل عشان يمنعنا عن بعض لفتره ولا يمنعنا نهائي و لو دي النهاية انا حتي مليش نفس اقول ليه كان في بداية لان انا رغم كل الوجع ال انا فيه ده و ال انا عارف انك فيه الا و ان اني مقدرش اني اقول مش عايز اعيش اللحظات دي، انا عايزهم كلهم و عايزك و هفضل اعافر مع اهلي عشان يبصوا زي منا باصص، يبصوا لحبيبتي و مزتي و معزتها عندي و انها شايلاني في عنيها، انا و الله يعز عليا كل دمعة و كل وجع اناي حستيه و بدعي ربنا من قلبي انه يخليني اعوضك عن ده، للمره المليون عارف ان الأنا بعمله دلوقتي ده غلط و اني لازم اسبلك مساحتك بس انا مش قادر يا آيه انا بحبك و عايزك في حياتي يا كل حياتي و مش عارف انا كده هبقا بعشمنا بحاجة مش هنعرف نوصلها ولا لا و لو وصلنالها هل اهالينا بقا هيرتاحوا لبعض فيها بعد الموقف ده ولا لا و قبلهم اصلا هل انتي هترتاحي كمان ولا لا.\n\nانا بجد مش عارف اعمل ايه ولا اروح فين ولا اجي منين انا عايزك و بحبك و بموت فيكي و اتحرمت منك ولا بذنبك ولا بذنبي بس بذنب حجات اتجمعت بصورة غريبة يعني انا مش عارف اصلا ده بقا حسد ولا ابتلاء ولا عمل ولا ايه البيحصل ده بس هو حصل و انا بحاول احاربه يا آيه و الله، انا من مل قلبي بحبك و عايز افضل جنبك حتي لو احنا مش من نصيب بعض دلوقتي يا عالم بكره في ايه، و اه انا اناني و عايز افضل جنبك حتي لو هيبقا فيه اذي لينا بس عالأقل ابقا معاكي و حاوليكي زي متعودنا.\n\nو انا فعلا اسف زي ما مكتوب علي السقف كده و بدعي اقدر اعوضك في اسرع وقت.",
+                unlock: "2026-11-26T00:00:00+02:00"
             }
         ].map(m => {
             const n = String(m.id).padStart(2, "0");
@@ -753,9 +730,7 @@
             // Bunny
             '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19.4 21.4C16 15 15.4 6.4 18.4 5.4c3-1 4.6 7.4 4 15"/><path d="M28.6 21.4C32 15 32.6 6.4 29.6 5.4c-3-1-4.6 7.4-4 15"/><ellipse cx="24" cy="30" rx="11" ry="10"/><circle cx="20" cy="28" r=".9" fill="currentColor"/><circle cx="28" cy="28" r=".9" fill="currentColor"/><path d="M22.8 32.2h2.4L24 33.6z" fill="currentColor"/><path d="M24 33.6c0 1.6-1.4 2.4-2.8 2M24 33.6c0 1.6 1.4 2.4 2.8 2"/></svg>',
             // Bat signal
-            '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="24" rx="20" ry="12.5"/><path d="M8.6 22.4c2.6 1.4 5 1.4 6.6.2-.6 2.4.4 4.6 2.4 5 .8-1.8 2.8-2.6 4.6-1.6l.8-3.4.6 1.2h.8l.6-1.2.8 3.4c1.8-1 3.8-.2 4.6 1.6 2-.4 3-2.6 2.4-5 1.6 1.2 4 1.2 6.6-.2-.8 4-4.4 7-9.4 7.6-1.6.2-3 1.2-4.4 3-1.4-1.8-2.8-2.8-4.4-3-5-.6-8.6-3.6-9.4-7.6z" fill="currentColor" fill-opacity=".18"/></svg>',
-            // Ring
-            '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="30" r="12"/><circle cx="24" cy="30" r="9"/><path d="M19 14l5-6 5 6-5 4z"/><path d="M19 14h10M24 8v10"/></svg>'
+            '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="24" rx="20" ry="12.5"/><path d="M8.6 22.4c2.6 1.4 5 1.4 6.6.2-.6 2.4.4 4.6 2.4 5 .8-1.8 2.8-2.6 4.6-1.6l.8-3.4.6 1.2h.8l.6-1.2.8 3.4c1.8-1 3.8-.2 4.6 1.6 2-.4 3-2.6 2.4-5 1.6 1.2 4 1.2 6.6-.2-.8 4-4.4 7-9.4 7.6-1.6.2-3 1.2-4.4 3-1.4-1.8-2.8-2.8-4.4-3-5-.6-8.6-3.6-9.4-7.6z" fill="currentColor" fill-opacity=".18"/></svg>'
         ];
 
         // ============================================================================
@@ -858,7 +833,6 @@
                 if (!celebrated) {
                     celebrated = true;
                     $("countdown-card").classList.add("is-big-day");
-                    celebrate();
                 }
             } else {
                 $("days").textContent = pad(Math.floor(dist / 86400000));
@@ -870,23 +844,11 @@
             // Re-render the grid only when something new unlocks
             const key = memories.map(m => isUnlocked(m, now) ? 1 : 0).join("");
             if (key !== unlockedSet) {
-                const firstRender = unlockedSet === "";
+                const prev = unlockedSet;
                 unlockedSet = key;
                 renderGrid(now);
                 updateProgress(now);
-                if (!firstRender) burst();
-            }
-
-            // Family milestone
-            if (now >= FAMILY_DATE) {
-                if (!$("milestone").classList.contains("done")) {
-                    $("milestone").classList.add("done");
-                    $("milestone-eyebrow").textContent = "Friday 20 November";
-                    $("milestone-text").textContent = "Two families, one story 🤍";
-                    $("milestone-sub").textContent = "";
-                }
-            } else {
-                $("milestone-sub").textContent = "in " + inWords(FAMILY_DATE - now);
+                if (prev && memories.some((m, i) => key[i] === "1" && prev[i] === "0" && !m.quiet)) burst();
             }
 
             // Next unlock teaser
@@ -1102,12 +1064,6 @@
             else { running = false; cx.clearRect(0, 0, innerWidth, innerHeight); }
         }
 
-        function celebrate() {
-            burst(220, .3);
-            setTimeout(() => burst(160, .45), 700);
-            setInterval(() => { if (!document.hidden) rain(50); }, 6000);
-        }
-
         // ============================================================================
         // FLOATING MOTIFS + GOLD DUST
         // ============================================================================
@@ -1151,7 +1107,7 @@
         setInterval(tick, 1000);
 
         // Celebrate newly unlocked memories she hasn't opened yet
-        if (memories.some(m => isUnlocked(m, Date.now()) && !seen.includes(m.id))) {
+        if (memories.some(m => isUnlocked(m, Date.now()) && !seen.includes(m.id) && !m.quiet)) {
             setTimeout(() => burst(120, .3), 900);
         }
         saveSeen();
